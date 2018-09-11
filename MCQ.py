@@ -30,7 +30,7 @@ def onsubmit(event):
         
 
         for sheet in sheets:
-            print (sheet)
+            #print (sheet)
             if ((sheet != "answerkey") and (sheet != "result")):
                 answersheet = wb[sheet]
                 for i in range(1,noofquestions+1):
@@ -43,23 +43,26 @@ def onsubmit(event):
                     stringbuffer = ""
                 answersheet["F1"].value = "Total :"
                 answersheet["G1"].value = mark
-                print (str(sheet)+ ":" +str(mark))
+                #print (str(sheet)+ ":" +str(mark))
                 mark_register[sheet]=mark
                 wb.save(filename)
                 mark = 0
 
-        if ("result" not in sheets):
-            wb.create_sheet("result")
-            resultsheet = wb["result"]
-            index = 1
-            for sheet in sheets:
-                if ((sheet != "answerkey") and (sheet != "result")):
-                    resultsheet["A" + str(index)].value = sheet
-                    resultsheet["B" + str(index)].value = mark_register[sheet]
-                    index = index + 1
-        else:
+        if ("result"  in sheets):
             print ("result sheet is already available")
+            print  ("updating..........")
+            del wb["result"]
+        wb.create_sheet("result")
+        resultsheet = wb["result"]
+        index = 1
+        for sheet in sheets:
+            if ((sheet != "answerkey") and (sheet != "result")):
+                resultsheet["A" + str(index)].value = sheet
+                resultsheet["B" + str(index)].value = mark_register[sheet]
+                index = index + 1
+        
         wb.save(filename)
+        print ("done")
 def validatefilename(filename):
     if(filename != ""):
         if (type(filename)== str):
